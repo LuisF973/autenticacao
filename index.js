@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors')
 const { sequelize } = require('./src/config/configDB');
-const routeAluno = require('./src/modulos/autenticacao/routes/autenticacao.route')
+const authRoute = require('./src/modulos/autenticacao/routes/autenticacao.route')
+const alunoRoute = require('./src/modulos/aluno/routes/aluno.route');
 // Configuração do banco de dados
 dotenv.config(); // Carrega variáveis de ambiente do arquivo .env
 
@@ -13,10 +14,19 @@ app.use(cors({
 }));
 
 app.use(express.json());
+// Rota de aluno
+// http://localhost:3000/api/cadastrar
+// http://localhost:3000/api/perfil
+app.use('/api/', alunoRoute);
 
-app.use('/', routeAluno)
+// Rota de autenticação
+// http://localhost:3000/api/login
+// http://localhost:3000/api/logout
+// http://localhost:3000/api/refresh-token
+app.use('/api', authRoute);
 
 const PORTA = process.env.PORTA;
+
 app.listen(PORTA, async () => {
     try {
         await sequelize.authenticate();

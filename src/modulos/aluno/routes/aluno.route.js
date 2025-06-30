@@ -1,6 +1,14 @@
 const express = require('express');
-const aluno = require('../controllers/aluno.controller')
-
+const AlunoController = require('../controllers/aluno.controller');
 const router = express.Router()
+const AutenticacaoMiddleware = require('../middleware/aluno.middleware');
 
-// perfil
+
+
+// rota publica de cadastro
+router.post('/cadastrar', AlunoController.cadastrar);
+
+//rota de perfil
+router.get('/perfil', AutenticacaoMiddleware.autenticarToken, AlunoController.perfil);
+
+module.exports = router;
